@@ -329,16 +329,17 @@ class _MainPageState extends State<MainPage> {
                 child: Center(
                   child: IconButton(
                     onPressed: () {
-                      elements.clear();
-                      widthPadding.clear();
-                      childSizes.clear();
+                      setState(() {
+                        elements.clear();
+                        widthPadding.clear();
+                        childSizes.clear();
+                      });
                     },
                     icon: Icon(
                       Icons.delete,
                       color: candidateData.isEmpty
                           ? Theme.of(context).disabledColor
                           : Theme.of(context).errorColor,
-                      size: 40,
                     ),
                   ),
                 ),
