@@ -8,8 +8,7 @@ import 'main.dart';
 /// This is to continuously keep track of the size and optionally the id of the
 /// ElementWidget. This happens when we resize the ElementHolders, you want
 /// to constrain it's child ElementWidget too, or vice versa.
-typedef ElementBuilder = Widget Function(
-    int id, Size size, BuildContext context);
+typedef ElementBuilder = Widget Function(int id, Size size, BuildContext context);
 
 /// This is to keep track of the child ElementWidget resizing. This data is then
 /// stored in main.dart's childSizes array.
@@ -72,31 +71,24 @@ class _ElementHolderState extends State<ElementHolder> {
         onPanStart: (details) {
           /// Here we check if the cursor clicked on the resize handle
           /// We do a comparison through global positioning.
-          var resizeBox =
-              _resizeKey.currentContext?.findRenderObject() as RenderBox;
+          var resizeBox = _resizeKey.currentContext?.findRenderObject() as RenderBox;
           var resizePos = resizeBox.localToGlobal(Offset.zero);
           var resizeBoxSize = resizeBox.size;
-          var resizePosCenter = Offset(resizePos.dx + resizeBoxSize.width / 2.0,
-              resizePos.dy + resizeBoxSize.height / 2.0);
-          if ((details.globalPosition.dx - resizePosCenter.dx).abs() <=
-                  resizeBoxSize.width / 2.0 &&
-              (details.globalPosition.dy - resizePosCenter.dy).abs() <=
-                  resizeBoxSize.height / 2.0) {
+          var resizePosCenter =
+              Offset(resizePos.dx + resizeBoxSize.width / 2.0, resizePos.dy + resizeBoxSize.height / 2.0);
+          if ((details.globalPosition.dx - resizePosCenter.dx).abs() <= resizeBoxSize.width / 2.0 &&
+              (details.globalPosition.dy - resizePosCenter.dy).abs() <= resizeBoxSize.height / 2.0) {
             setState(() {
               _interactionState = InteractionState.RESIZING;
             });
           } else {
             /// This is the exact same logic, but for the drag handle.
-            var dragBox =
-                _dragKey.currentContext?.findRenderObject() as RenderBox;
+            var dragBox = _dragKey.currentContext?.findRenderObject() as RenderBox;
             var dragPos = dragBox.localToGlobal(Offset.zero);
             var dragBoxSize = dragBox.size;
-            var dragPosCenter = Offset(dragPos.dx + dragBoxSize.width / 2.0,
-                dragPos.dy + dragBoxSize.height / 2.0);
-            if ((details.globalPosition.dx - dragPosCenter.dx).abs() <=
-                    dragBoxSize.width / 2.0 &&
-                (details.globalPosition.dy - dragPosCenter.dy).abs() <=
-                    dragBoxSize.height / 2.0) {
+            var dragPosCenter = Offset(dragPos.dx + dragBoxSize.width / 2.0, dragPos.dy + dragBoxSize.height / 2.0);
+            if ((details.globalPosition.dx - dragPosCenter.dx).abs() <= dragBoxSize.width / 2.0 &&
+                (details.globalPosition.dy - dragPosCenter.dy).abs() <= dragBoxSize.height / 2.0) {
               setState(() {
                 _interactionState = InteractionState.DRAGGING;
               });
@@ -112,11 +104,8 @@ class _ElementHolderState extends State<ElementHolder> {
             /// RESIZE LOGIC
             var thisBox = context.findRenderObject() as RenderBox;
             setState(() {
-              elementSize = Size(
-                  min(thisBox.size.width,
-                      max(16.0, elementSize.width + details.delta.dx * 2.0)),
-                  min(thisBox.size.height,
-                      max(16.0, elementSize.height + details.delta.dy * 2.0)));
+              elementSize = Size(min(thisBox.size.width, max(16.0, elementSize.width + details.delta.dx * 2.0)),
+                  min(thisBox.size.height, max(16.0, elementSize.height + details.delta.dy * 2.0)));
             });
           } else if (_interactionState == InteractionState.DRAGGING) {
             /// DRAG LOGIC.
@@ -151,10 +140,8 @@ class _ElementHolderState extends State<ElementHolder> {
                       child: StreamBuilder<bool>(
                           stream: widget.editStateController.stream,
                           builder: (context, snapshot) {
-                            if (!(snapshot.data ?? false))
-                              return const SizedBox();
-                            return HandleDot(
-                                color: Colors.white, key: _resizeKey);
+                            if (!(snapshot.data ?? false)) return const SizedBox();
+                            return HandleDot(color: Colors.white, key: _resizeKey);
                           })),
                 ],
               )),
@@ -166,8 +153,7 @@ class _ElementHolderState extends State<ElementHolder> {
                 stream: widget.editStateController.stream,
                 builder: (context, snapshot) {
                   if (!(snapshot.data ?? false)) return const SizedBox();
-                  return HandleDot(
-                      color: Colors.green.withOpacity(0.5), key: _dragKey);
+                  return HandleDot(color: Colors.green.withOpacity(0.5), key: _dragKey);
                 }),
           ),
         ]),
@@ -205,20 +191,16 @@ class _ElementWidgetState extends State<ElementWidget> {
           width: widget.size.width,
           height: widget.size.height,
           decoration: BoxDecoration(
-              color: widget.shape == Shape.CIRCLE_OUTLINE ||
-                      widget.shape == Shape.SQUARE_OUTLINE
+              color: widget.shape == Shape.CIRCLE_OUTLINE || widget.shape == Shape.SQUARE_OUTLINE
                   ? Colors.transparent
                   : color,
-              border: widget.shape == Shape.CIRCLE_OUTLINE ||
-                      widget.shape == Shape.SQUARE_OUTLINE
+              border: widget.shape == Shape.CIRCLE_OUTLINE || widget.shape == Shape.SQUARE_OUTLINE
                   ? Border.all(color: color, width: 4)
                   : null,
-              borderRadius: widget.shape == Shape.CIRCLE ||
-                      widget.shape == Shape.CIRCLE_OUTLINE
+              borderRadius: widget.shape == Shape.CIRCLE || widget.shape == Shape.CIRCLE_OUTLINE
                   ? BorderRadius.circular(100)
                   : null,
-              shape: widget.shape == Shape.CIRCLE ||
-                      widget.shape == Shape.CIRCLE_OUTLINE
+              shape: widget.shape == Shape.CIRCLE || widget.shape == Shape.CIRCLE_OUTLINE
                   ? BoxShape.rectangle
                   : BoxShape.rectangle),
           child: widget.id == -1 ? null : Center(child: Text('${widget.id}')),
@@ -270,10 +252,8 @@ class HandleDot extends StatelessWidget {
     return Container(
       width: 16,
       height: 16,
-      decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.black38, width: 3)),
+      decoration:
+          BoxDecoration(color: color, shape: BoxShape.circle, border: Border.all(color: Colors.black38, width: 3)),
     );
   }
 }

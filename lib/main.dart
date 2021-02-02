@@ -15,10 +15,7 @@ enum Shape { SQUARE, SQUARE_OUTLINE, CIRCLE, CIRCLE_OUTLINE }
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Codelessly Interview',
-        theme: ThemeData(primarySwatch: Colors.blue),
-        home: MainPage());
+    return MaterialApp(title: 'Codelessly Interview', theme: ThemeData(primarySwatch: Colors.blue), home: MainPage());
   }
 }
 
@@ -72,15 +69,13 @@ class _MainPageState extends State<MainPage> {
           Row(
             children: [
               ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width / 3.0),
+                constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 3.0),
                 child: StreamBuilder<bool>(
                     stream: editStateController.stream,
                     builder: (context, snapshot) {
                       return SwitchListTile(
                           title: Text('Edit Mode'),
-                          subtitle: Text(
-                              'Will enable you to change the position and size of each element'),
+                          subtitle: Text('Will enable you to change the position and size of each element'),
                           value: snapshot.data ?? false,
                           onChanged: (newValue) {
                             editStateController.add(newValue);
@@ -88,12 +83,10 @@ class _MainPageState extends State<MainPage> {
                     }),
               ),
               ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width / 3.0),
+                constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 3.0),
                 child: SwitchListTile(
                     title: Text('Fix Width'),
-                    subtitle: Text(
-                        'If this is enabled, the row will no longer be expandable, '
+                    subtitle: Text('If this is enabled, the row will no longer be expandable, '
                         "rather fixed to the width it's at currently."
                         'Elements will also no longer squish.'),
                     value: fixedMode,
@@ -107,8 +100,7 @@ class _MainPageState extends State<MainPage> {
                           final screenWidth = MediaQuery.of(context).size.width;
                           var endPadding = defaultSize.width + 6 + 16;
                           for (int i = 0; i < widthPadding.length; i++) {
-                            widthPadding[i] = max(
-                                16, widthPadding[i] * screenWidth - endPadding);
+                            widthPadding[i] = max(16, widthPadding[i] * screenWidth - endPadding);
                           }
                         }
                       });
@@ -116,12 +108,11 @@ class _MainPageState extends State<MainPage> {
               ),
               if (fixedMode)
                 ConstrainedBox(
-                  constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width / 3.0),
+                  constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 3.0),
                   child: SwitchListTile(
                       title: Text('Use Fractions'),
-                      subtitle: Text(
-                          'If this is enabled, the grey boxes will use fractions instead of pixel constraints.'),
+                      subtitle:
+                          Text('If this is enabled, the grey boxes will use fractions instead of pixel constraints.'),
                       value: useFractions,
                       onChanged: (newValue) {
                         setState(() {
@@ -133,13 +124,9 @@ class _MainPageState extends State<MainPage> {
                             }
                           } else {
                             /// RESET
-                            final screenWidth =
-                                MediaQuery.of(context).size.width;
+                            final screenWidth = MediaQuery.of(context).size.width;
                             for (int i = 0; i < widthPadding.length; i++) {
-                              widthPadding[i] = max(
-                                  16,
-                                  widthPadding[i] * screenWidth -
-                                      (12 * elements.length));
+                              widthPadding[i] = max(16, widthPadding[i] * screenWidth - (12 * elements.length));
                             }
                           }
                         });
@@ -159,10 +146,7 @@ class _MainPageState extends State<MainPage> {
                   .map((shape) => Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ElementWidget(
-                            id: -1,
-                            size: defaultSize,
-                            shape: shape,
-                            color: Theme.of(context).primaryColor),
+                            id: -1, size: defaultSize, shape: shape, color: Theme.of(context).primaryColor),
                       ))
                   .toList(),
             ],
@@ -183,8 +167,7 @@ class _MainPageState extends State<MainPage> {
                               /// Just replacing the element from the list.
                               setState(() {
                                 int index = elements.indexOf(elementBuilder);
-                                elements[index] = (id, size, context) =>
-                                    ElementWidget(
+                                elements[index] = (id, size, context) => ElementWidget(
                                       editStateController: editStateController,
                                       id: id,
                                       size: size,
@@ -193,9 +176,8 @@ class _MainPageState extends State<MainPage> {
                                     );
                               });
                             },
-                            builder: (BuildContext context,
-                                List<List<int>?> candidateData,
-                                List<dynamic> rejectedData) {
+                            builder:
+                                (BuildContext context, List<List<int>?> candidateData, List<dynamic> rejectedData) {
                               var index = elements.indexOf(elementBuilder);
                               var endPadding = defaultSize.width + 6 + 16;
 
@@ -203,9 +185,7 @@ class _MainPageState extends State<MainPage> {
                               var size = Size(
                                   widthPadding[index] *
                                       (useFractions
-                                          ? MediaQuery.of(context).size.width -
-                                              endPadding -
-                                              (12 * elements.length)
+                                          ? MediaQuery.of(context).size.width - endPadding - (12 * elements.length)
                                           : 1),
                                   defaultSize.height);
 
@@ -222,8 +202,7 @@ class _MainPageState extends State<MainPage> {
                                 /// can calculate constraints.
                                 onChildResize: (Size childSize) {
                                   setState(() {
-                                    var index =
-                                        elements.indexOf(elementBuilder);
+                                    var index = elements.indexOf(elementBuilder);
                                     childSizes[index] = childSize;
                                   });
                                 },
@@ -253,34 +232,26 @@ class _MainPageState extends State<MainPage> {
                                       var childWidth = childSizes[i].width;
 
                                       if (useFractions) {
-                                        var endPadding =
-                                            defaultSize.width + 6 + 16;
+                                        var endPadding = defaultSize.width + 6 + 16;
                                         var scrnWidth =
-                                            MediaQuery.of(context).size.width -
-                                                endPadding -
-                                                (12 * elements.length);
+                                            MediaQuery.of(context).size.width - endPadding - (12 * elements.length);
                                         var amountFraction = amount / scrnWidth;
-                                        var childFraction =
-                                            childWidth / scrnWidth;
+                                        var childFraction = childWidth / scrnWidth;
 
                                         /// It's already stored as a fraction.
                                         var elementFraction = elementWidth;
-                                        var spaceLeftFraction =
-                                            elementFraction - childFraction;
+                                        var spaceLeftFraction = elementFraction - childFraction;
 
                                         if (spaceLeftFraction > 0) {
-                                          var amountLeft = spaceLeftFraction -
-                                              amountFraction;
+                                          var amountLeft = spaceLeftFraction - amountFraction;
                                           if (amountLeft > 0) {
                                             widthPadding[i] -= amountFraction;
-                                            widthPadding[index + 1] +=
-                                                amountFraction;
+                                            widthPadding[index + 1] += amountFraction;
                                             break;
                                           }
                                         }
                                       } else {
-                                        var spaceLeft =
-                                            elementWidth - childWidth;
+                                        var spaceLeft = elementWidth - childWidth;
                                         if (spaceLeft > 0) {
                                           var amountLeft = spaceLeft - amount;
                                           if (amountLeft > 0) {
@@ -292,40 +263,30 @@ class _MainPageState extends State<MainPage> {
                                       }
                                     }
                                   } else {
-                                    for (int i = index + 1;
-                                        i < elements.length;
-                                        i++) {
+                                    for (int i = index + 1; i < elements.length; i++) {
                                       var elementWidth = widthPadding[i];
                                       var childWidth = childSizes[i].width;
 
                                       if (useFractions) {
-                                        var endPadding =
-                                            defaultSize.width + 6 + 16;
+                                        var endPadding = defaultSize.width + 6 + 16;
                                         var scrnWidth =
-                                            MediaQuery.of(context).size.width -
-                                                endPadding -
-                                                (12 * elements.length);
+                                            MediaQuery.of(context).size.width - endPadding - (12 * elements.length);
                                         var amountFraction = amount / scrnWidth;
-                                        var childFraction =
-                                            childWidth / scrnWidth;
+                                        var childFraction = childWidth / scrnWidth;
 
                                         /// It's already stored as a fraction.
                                         var elementFraction = elementWidth;
-                                        var spaceLeftFraction =
-                                            elementFraction - childFraction;
+                                        var spaceLeftFraction = elementFraction - childFraction;
                                         if (spaceLeftFraction > 0) {
-                                          var amountLeft = spaceLeftFraction -
-                                              amountFraction;
+                                          var amountLeft = spaceLeftFraction - amountFraction;
                                           if (amountLeft > 0) {
                                             widthPadding[i] -= amountFraction;
-                                            widthPadding[index] +=
-                                                amountFraction;
+                                            widthPadding[index] += amountFraction;
                                             break;
                                           }
                                         }
                                       } else {
-                                        var spaceLeft =
-                                            elementWidth - childWidth;
+                                        var spaceLeft = elementWidth - childWidth;
                                         if (spaceLeft > 0) {
                                           var amountLeft = spaceLeft - amount;
                                           if (amountLeft > 0) {
@@ -342,8 +303,7 @@ class _MainPageState extends State<MainPage> {
                                   /// grow/shrink as it pleases independently.
                                   ///
                                   /// No restriction on Row width.
-                                  widthPadding[index] = max(16,
-                                      widthPadding[index] + details.delta.dx);
+                                  widthPadding[index] = max(16, widthPadding[index] + details.delta.dx);
                                 }
                               });
                             },
@@ -354,8 +314,7 @@ class _MainPageState extends State<MainPage> {
                                 /// selecting a box handle to drag around.
                               },
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: Container(
                                     color: Colors.black26,
                                     width: 4,
@@ -385,13 +344,10 @@ class _MainPageState extends State<MainPage> {
 
                       /// Give it default data.
                       widthPadding.add(defaultSize.width);
-                      childSizes.add(Size(
-                          defaultSize.width / 2.0, defaultSize.height / 2.0));
+                      childSizes.add(Size(defaultSize.width / 2.0, defaultSize.height / 2.0));
                     });
                   },
-                  builder: (BuildContext context,
-                          List<List<int>?> candidateData,
-                          List<dynamic> rejectedData) =>
+                  builder: (BuildContext context, List<List<int>?> candidateData, List<dynamic> rejectedData) =>
                       DottedBorder(
                         strokeWidth: 3,
                         dashPattern: [5, 5],
@@ -400,8 +356,7 @@ class _MainPageState extends State<MainPage> {
                         child: Container(
                           width: defaultSize.width,
                           height: defaultSize.height,
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.15),
+                          color: Theme.of(context).primaryColor.withOpacity(0.15),
                           child: Center(
                             child: Icon(
                               Icons.add,
@@ -442,11 +397,9 @@ class _MainPageState extends State<MainPage> {
               });
             },
             onWillAccept: (details) => details == null || details[0] >= 0,
-            builder: (BuildContext context, List<List<int>?> candidateData,
-                List<dynamic> rejectedData) {
+            builder: (BuildContext context, List<List<int>?> candidateData, List<dynamic> rejectedData) {
               return Container(
-                color:
-                    candidateData.isEmpty ? Colors.transparent : Colors.yellow,
+                color: candidateData.isEmpty ? Colors.transparent : Colors.yellow,
                 child: Center(
                   child: IconButton(
                     onPressed: () {
@@ -458,9 +411,7 @@ class _MainPageState extends State<MainPage> {
                     },
                     icon: Icon(
                       Icons.delete,
-                      color: candidateData.isEmpty
-                          ? Theme.of(context).disabledColor
-                          : Theme.of(context).errorColor,
+                      color: candidateData.isEmpty ? Theme.of(context).disabledColor : Theme.of(context).errorColor,
                     ),
                   ),
                 ),
